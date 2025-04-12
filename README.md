@@ -1,65 +1,153 @@
-# cli-agent README
+# 🧠 AI Local Agent — Natural Language to Terminal Commands
 
-This is the README for your extension "cli-agent". After writing up a brief description, we recommend including the following sections.
-
-## Features
-
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
-
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
-
-## Requirements
-
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
-
-## Extension Settings
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
+**AI Local Agent** is a CLI + VS Code extension that allows you to describe tasks in natural language and automatically turns them into executable shell commands. It leverages a generative AI model to plan and run terminal tasks with interactive feedback and retries — all from your terminal or editor.
 
 ---
 
-## Working with Markdown
+## ✨ Features
 
-You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
+- 🚣️ **Natural language to commands**: Type your goal in plain English.
+- 🧠 **AI-powered planning**: Uses Google Gemini API to plan terminal commands.
+- ⟳ **Interactive execution flow**:
+  - Displays the plan for approval.
+  - Runs the commands on your local system after confirmation.
+  - Asks whether the task was successful.
+  - If not, takes feedback and refines the plan with AI.
+- 🧪 **Handles retries**: Automatically retries failed plans up to 3 times.
+- 🔄 **Cross-platform**: Works on macOS, Linux, and Windows.
+- ✨ **Optional VS Code Extension**: Chat with the agent directly in your editor.
 
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets
+---
 
-## For more information
+## 📚 How It Works
 
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+1. You start by describing a task like:
 
-**Enjoy!**
+   > "Generate a Python script that prints numbers 1 to 10 and run it."
+
+2. The agent will:
+
+   - Analyze your input
+   - Ask Gemini AI to create a terminal command plan
+   - Show you the plan (e.g. writing and running a script)
+
+3. After your confirmation:
+
+   - It creates and executes the command/script
+   - Shows the output
+
+4. If the result is not what you expected:
+   - Give feedback (e.g. "It failed because of a syntax error")
+   - The AI will fix the plan and retry
+
+---
+
+## ⚙️ Installation
+
+### 1. Clone the Repo
+
+```bash
+git clone https://github.com/your-username/ai-local-agent.git
+cd ai-local-agent
+```
+
+### 2. Install Dependencies
+
+```bash
+npm install
+```
+
+### 3. Set Up API Key
+
+This project uses [Gemini API](https://ai.google.dev/). Set your API key in a `.env` file:
+
+```env
+GEMINI_API_KEY=your_api_key_here
+```
+
+### 4. Run CLI Agent
+
+```bash
+node src/agentLogic.js
+```
+
+(Currently, it is integrated within VS Code UI. Direct CLI-only mode support coming soon)
+
+### 5. Install the VS Code Extension (Optional)
+
+- Open the folder in VS Code.
+- Press `F5` to launch the extension in a new window.
+- In the new window, open the "AI Agent Chat" view.
+
+---
+
+## 🎨 Example Task
+
+> "Create a Node.js script that reads a file and logs its contents. Then run it."
+
+The AI will generate something like:
+
+```bash
+cat <<EOF > readFile.js
+const fs = require('fs');
+fs.readFile('sample.txt', 'utf8', (err, data) => {
+  if (err) throw err;
+  console.log(data);
+});
+EOF
+node readFile.js
+```
+
+You can review, approve, and execute with one click or reply.
+
+---
+
+## 🚀 Technologies Used
+
+- [VS Code Extensions API](https://code.visualstudio.com/api)
+- [Google Generative AI (Gemini)](https://ai.google.dev/)
+- Node.js + Webview
+
+---
+
+## 📆 Roadmap
+
+- [ ] Better CLI-only interface
+- [ ] Task persistence & history panel
+- [ ] Multi-step task support with context
+- [ ] Add support for other AI providers (e.g., OpenAI, Claude)
+
+---
+
+## 🙌 Contributing
+
+PRs and suggestions welcome! File an issue or drop feedback if something doesn't work as expected.
+
+---
+
+## 📁 Project Structure
+
+```
+.
+├── src
+│   ├── agentLogic.js          # Core AI agent logic
+│   ├── AgentViewProvider.js   # VS Code view integration
+│   └── extension.js           # VS Code extension entry point
+├── media
+│   └── main.js                # Webview JS for chat UI
+├── .env
+├── package.json
+└── README.md
+```
+
+---
+
+## 💪 License
+
+MIT License
+
+---
+
+## 🚀 Get Started Now
+
+Start talking to your terminal like it's your developer assistant. Type a task and let the AI do the rest!

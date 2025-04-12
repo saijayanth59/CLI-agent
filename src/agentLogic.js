@@ -11,7 +11,7 @@ dotenv.config();
 
 // --- Configuration ---
 const API_KEY = process.env.GEMINI_API_KEY;
-const MODEL_NAME = "gemini-1.5-flash"; // Or "gemini-pro", etc.
+const MODEL_NAME = "gemini-2.0-flash-lite"; // Or "gemini-pro", etc.
 const MAX_RETRIES = 3;
 
 // --- Markers for Webview Communication ---
