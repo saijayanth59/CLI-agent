@@ -1,9 +1,7 @@
-// --- START OF FILE src/AgentViewProvider.js ---
 const vscode = require("vscode");
-const path = require("path"); // Although path might not be used directly here, it's often useful
-const { AgentLogic } = require("./agentLogic"); // Import the JS agent logic
+const path = require("path");
+const { AgentLogic } = require("./agentLogic");
 
-// Function to generate nonce (same as before)
 function getNonce() {
   let text = "";
   const possible =
@@ -38,7 +36,6 @@ class AgentViewProvider {
 
     webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
 
-    // ✅ Initialize AgentLogic ONLY ONCE here
     if (!this._agentLogic) {
       try {
         console.log(
@@ -126,13 +123,11 @@ class AgentViewProvider {
     webviewView.onDidDispose(() => {
       console.log("Webview disposed.");
       this._view = undefined;
-      // Optionally clear logic if you want reset on every view open:
-      // this._agentLogic = undefined;
     });
   }
   sendMessageToWebview(command, data) {
     const message = { command, data: data || {} };
-    this._chatHistory.push(message); // Store message in history
+    this._chatHistory.push(message);
 
     if (this._view) {
       this._view.webview.postMessage(message);
@@ -185,5 +180,4 @@ class AgentViewProvider {
   }
 }
 
-module.exports = { AgentViewProvider }; // Export the class
-// --- END OF FILE src/AgentViewProvider.js ---
+module.exports = { AgentViewProvider };

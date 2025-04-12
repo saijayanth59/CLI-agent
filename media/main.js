@@ -1,9 +1,6 @@
-// --- START OF FILE media/main.js ---
 (function () {
-  // @ts-ignore - Get VS Code API handle
   const vscode = acquireVsCodeApi();
 
-  // --- Get DOM Elements (Same as before) ---
   const messagesContainer = document.getElementById("messages");
   const messageInput = document.getElementById("message-input");
   const sendButton = document.getElementById("send-button");
@@ -15,11 +12,9 @@
   );
   const executionOutputPre = document.getElementById("execution-output");
 
-  // --- Helper Functions (Modified for clarity and safety) ---
   function addMessage(type, text) {
     if (!messagesContainer) return;
     const messageDiv = document.createElement("div");
-    // Ensure type is one of the expected classes, default if not
     const safeType = [
       "user",
       "bot",
@@ -32,7 +27,7 @@
       ? type
       : "log";
     messageDiv.classList.add("message", safeType);
-    messageDiv.textContent = text || "(empty message)"; // Prevent adding blank elements
+    messageDiv.textContent = text || "(empty message)";
     messagesContainer.appendChild(messageDiv);
     scrollToBottom();
   }
@@ -48,17 +43,16 @@
   }
 
   function clearChat() {
-    if (messagesContainer) messagesContainer.innerHTML = ""; // Clear all messages
+    if (messagesContainer) messagesContainer.innerHTML = "";
     clearPrompts();
     clearExecutionOutput();
-    if (restartContainer) restartContainer.style.display = "none"; // Hide restart button
+    if (restartContainer) restartContainer.style.display = "none";
   }
 
   function scrollToBottom() {
     setTimeout(() => {
       if (messagesContainer)
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
-      // Only scroll execution output if it's actually visible
       if (
         executionOutputPre &&
         executionOutputContainer &&
@@ -66,7 +60,7 @@
       ) {
         executionOutputPre.scrollTop = executionOutputPre.scrollHeight;
       }
-    }, 50); // Small delay for DOM updates
+    }, 50);
   }
 
   function createButton(id, text, onClick) {
@@ -77,7 +71,6 @@
     return button;
   }
 
-  // --- Event Listeners (Same as before) ---
   if (messageInput) {
     messageInput.addEventListener("keypress", (e) => {
       if (e.key === "Enter" && !e.shiftKey && !messageInput.disabled) {
@@ -90,37 +83,31 @@
   if (restartButton)
     restartButton.addEventListener("click", () => {
       vscode.postMessage({ command: "requestAgentRestart" });
-      // UI cleared via 'resetChat' command from AgentViewProvider
     });
 
-  // --- VS Code Communication ---
   function sendMessage() {
     if (!messageInput || messageInput.disabled) return;
     const text = messageInput.value.trim();
     if (text) {
       vscode.postMessage({ command: "sendMessage", text: text });
-      messageInput.value = ""; // Clear input after sending
+      messageInput.value = "";
     }
   }
 
-  // Handle messages received FROM the extension backend (AgentViewProvider.js)
   window.addEventListener("message", (event) => {
-    const message = event.data; // The JSON data { command: string, data: any }
-    const command = message.command; // The command string (e.g., "addBotMessage")
-    const data = message.data || {}; // The payload
+    const message = event.data;
+    const command = message.command;
+    const data = message.data || {};
 
-    // *Important*: Log received commands for debugging in Webview DevTools
     console.log("WebView Received:", command, data);
 
-    // Use the command string directly from the message
     switch (command) {
-      // Simple message additions
       case "addBotMessage":
         addMessage("bot", data.text);
         break;
       case "addUserMessage":
         addMessage("user", data.text);
-        break; // Usually sent by ViewProvider, but handled just in case
+        break;
       case "addErrorMessage":
         addMessage("error", data.text);
         break;
@@ -155,11 +142,6 @@
           const title = document.createElement("h4");
           title.textContent = "Execution Plan:";
           const pre = document.createElement("pre");
-          // Optional: Add code element for syntax highlighters if you integrate one
-          // const codeEl = document.createElement('code');
-          // codeEl.className = `language-${data.syntax || 'bash'}`; // Set language class
-          // codeEl.textContent = data.code;
-          // pre.appendChild(codeEl);
           pre.textContent = data.code; // Safer: use textContent directly
           planContainer.appendChild(title);
           planContainer.appendChild(pre);
@@ -259,12 +241,10 @@
 
       case "addExecutionOutput": // Command received from AgentLogic
         if (executionOutputContainer && executionOutputPre) {
-          // Ensure container is visible if it was hidden (e.g., on first output)
           if (executionOutputContainer.style.display === "none") {
             executionOutputContainer.style.display = "block";
           }
           const lineSpan = document.createElement("span");
-          // Ensure text exists and append newline for clarity in <pre>
           lineSpan.textContent = (data.text || "") + "\n";
           if (data.isError) {
             lineSpan.classList.add("error-line"); // Apply error styling
@@ -283,9 +263,9 @@
         break;
 
       // --- Other Commands ---
-      case "showRestartButton": // Make restart button visible
+      case "showRestartButton":
         if (restartContainer) restartContainer.style.display = "block";
-        if (messageInput) messageInput.disabled = true; // Keep input disabled if agent needs restart
+        if (messageInput) messageInput.disabled = true;
         if (sendButton) sendButton.disabled = true;
         if (messageInput)
           messageInput.placeholder = "Agent stopped. Please Restart.";
@@ -294,18 +274,13 @@
       case "resetChat": // Usually called on restart request
         clearChat();
         break;
-        
 
       default:
         console.warn("WebView received unknown command:", command, data);
     }
   });
 
-  // --- Initialization ---
-  // Add an initial message in the webview itself before the agent starts fully
   addMessage("status", "Initializing Agent Interface...");
-  // Inform the extension backend that the webview is ready.
   vscode.postMessage({ command: "webviewLoaded" });
   console.log("Webview script loaded, posted 'webviewLoaded' to extension.");
 })();
-// --- END OF FILE media/main.js ---
