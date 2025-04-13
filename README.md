@@ -47,8 +47,8 @@
 ### 1. Clone the Repo
 
 ```bash
-git clone https://github.com/your-username/ai-local-agent.git
-cd ai-local-agent
+git clone https://github.com/saijayanth59/CLI-agent.git
+cd CLI-agent
 ```
 
 ### 2. Install Dependencies
@@ -65,20 +65,14 @@ This project uses [Gemini API](https://ai.google.dev/). Set your API key in a `.
 GEMINI_API_KEY=your_api_key_here
 ```
 
-### 4. Run CLI Agent
+### 4. Run and Debug extension.js present in src
 
 ```bash
-node src/agentLogic.js
+- Press `F5` to launch the extension in a new window.
+- In the new window, open the "AI Agent Chat" view.
 ```
 
 (Currently, it is integrated within VS Code UI. Direct CLI-only mode support coming soon)
-
-### 5. Install the VS Code Extension (Optional)
-
-- Open the folder in VS Code.
-- Press `F5` to launch the extension in a new window.
-- In the new window, open the "AI Agent Chat" view.
-
 ---
 
 ## 🎨 Example Task

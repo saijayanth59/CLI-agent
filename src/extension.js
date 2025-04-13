@@ -1,10 +1,13 @@
 const vscode = require("vscode");
 const { AgentViewProvider } = require("./AgentViewProvider");
-
+const dotenv = require("dotenv");
+dotenv.config();
 function activate(context) {
   console.log(
     'Congratulations, your extension "ai-local-agent" is now active!'
   );
+
+  // console.log(process.env.GEMINI_API_KEY);
 
   const provider = new AgentViewProvider(context);
   context.subscriptions.push(
