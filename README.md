@@ -2,6 +2,8 @@
 
 **AI Local Agent** is a CLI + VS Code extension that allows you to describe tasks in natural language and automatically turns them into executable shell commands. It leverages a generative AI model to plan and run terminal tasks with interactive feedback and retries — all from your terminal or editor.
 
+🎥 **Video Demo:** [Watch it](https://drive.google.com/drive/folders/1i6q3jk_jFcRPtlxC0JeTruQQJhYGQNiA?usp=sharing)
+
 ---
 
 ## ✨ Features
@@ -72,8 +74,7 @@ GEMINI_API_KEY=your_api_key_here
 - In the new window, open the "AI Agent Chat" view.
 ```
 
-(Currently, it is integrated within VS Code UI. Direct CLI-only mode support coming soon)
----
+## (Currently, it is integrated within VS Code UI. Direct CLI-only mode support coming soon)
 
 ## 🎨 Example Task
 
